@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyección de Casillas Electorales</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Proyección de Casillas Electorales</h1>
+        
+        <div class="upload-section">
+            <div class="file-group">
+                <label for="conformacion">Archivo de Conformación de Casillas (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="conformacion" accept=".xlsx">
+                    <span id="check-conformacion" class="file-check">✓</span>
+                </div>
+            </div>
+            
+            <div class="file-group">
+                <label for="estadistico">Archivo Estadístico Padrón y Lista Nominal (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="estadistico" accept=".xlsx">
+                    <span id="check-estadistico" class="file-check">✓</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="base-selection">
+            <p>Base para determinar el número de casillas:</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="base" value="padron" checked> Padrón Electoral
+                </label>
+                <label>
+                    <input type="radio" name="base" value="lista" > Lista Nominal
+                </label>
+            </div>
+        </div>
+
+        <button class="btn primary" onclick="processFiles()">Generar Proyección</button>
+
+        <div id="loading" class="loading-overlay" style="display: none;">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <span>Procesando archivos...</span>
+            </div>
+        </div>
+
+        <div id="results" class="results-section" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out;">
+            <h2>Resultados de la Proyección</h2>
+
+            <!-- Estadísticas Globales -->
+            <div id="global-stats" class="stats-card fade-in">
+                <h3>Estadísticas Globales</h3>
+                <div id="global-stats-content"></div>
+            </div>
+
+            <!-- Proyección por municipio -->
+            <div id="municipal-stats" class="stats-card fade-in" style="margin-top: 32px;">
+                <h3>Casillas proyectadas por municipio</h3>
+                <div id="municipal-table-container" class="table-responsive"></div>
+            </div>
+
+            <a id="download" class="btn success download-btn" style="display: block;" download="proyeccion_casillas.xlsx">
+                Descargar archivo Excel
+            </a>
+       
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
