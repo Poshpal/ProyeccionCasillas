@@ -1,3 +1,4 @@
+<DOCUMENT filename="index.html">
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +13,7 @@
         <h1>Proyección de Casillas Electorales</h1>
         
         <div class="upload-section">
+            
             <div class="file-group">
                 <label for="conformacion">Archivo de Conformación de Casillas (.xlsx):</label>
                 <div class="file-input-wrapper">
@@ -19,25 +21,56 @@
                     <span id="check-conformacion" class="file-check">✓</span>
                 </div>
             </div>
-            
-            <div class="file-group">
-                <label for="estadistico">Archivo Estadístico Padrón y Lista Nominal (.xlsx):</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="estadistico" accept=".xlsx">
-                    <span id="check-estadistico" class="file-check">✓</span>
+              
+            <!-- Guía Conformación -->
+            <div class="guide" style="flex:1; min-width:300px;">
+                <h3>📋 Archivo de Conformación (debe tener exactamente estas columnas)</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Entidad</div>
+                    <div class="col-box">B: Distrito</div>
+                    <div class="col-box">C: Distrito Local</div>
+                    <div class="col-box important">D: Municipio <span class="label">(índice 3) → número</span></div>
+                    <div class="col-box important">E: Sección <span class="label">(índice 4)</span></div>
+                    <div class="col-box important">F: Localidad <span class="label">(índice 5)</span></div>
+                    <div class="col-box">G: Nombre</div>
+                    <div class="col-box important">H: Manzana <span class="label">(índice 7)</span></div>
+                    <div class="col-box important">I: Asignación <span class="label">(índice 8) → B / E1 / E2...</span></div>
+                    <div class="col-box">J: Sede</div>
                 </div>
+                <small style="color:#d9534f;">✅ Si tu archivo tiene las columnas en otro orden, usa Excel → Insertar columna y reordénalas.</small>
             </div>
-        </div>
-
+        
+        
+            <div class="file-group">
+                    <label for="estadistico">Archivo Estadístico Padrón y Lista Nominal (.xlsx):</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="estadistico" accept=".xlsx">
+                        <span id="check-estadistico" class="file-check">✓</span>
+                    </div>
+            </div>
+         
+            <!-- Guía Estadístico -->
+            <div class="guide" style="flex:1; min-width:300px;">
+                <h3>📋 Archivo Estadístico (debe tener exactamente estas columnas)</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Entidad</div>
+                    <div class="col-box">B: Distrito</div>
+                    <div class="col-box important">C: Municipio <span class="label">(índice 2)</span></div>
+                    <div class="col-box important">D: Sección <span class="label">(índice 3)</span></div>
+                    <div class="col-box important">E: Localidad <span class="label">(índice 4)</span></div>
+                    <div class="col-box important">F: Manzana <span class="label">(índice 5) → ** o número</span></div>
+                    <div class="col-box important">G: Padrón <span class="label">(índice 6)</span></div>
+                    <div class="col-box important">H: Lista Nominal <span class="label">(índice 7)</span></div>
+                </div>
+                <small style="color:#28a745;">✅ El script ya reconoce automáticamente ** y números de manzana.</small>
+            </div>
+        </div>            
+        
         <div class="base-selection">
             <p>Base para determinar el número de casillas:</p>
             <div class="radio-group">
-                <label>
-                    <input type="radio" name="base" value="padron" checked> Padrón Electoral
-                </label>
-                <label>
-                    <input type="radio" name="base" value="lista" > Lista Nominal
-                </label>
+                <label><input type="radio" name="base" value="padron" checked> Padrón Electoral</label>
+                <label><input type="radio" name="base" value="lista"> Lista Nominal</label>
             </div>
         </div>
 
@@ -52,27 +85,21 @@
 
         <div id="results" class="results-section" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out;">
             <h2>Resultados de la Proyección</h2>
-
-            <!-- Estadísticas Globales -->
             <div id="global-stats" class="stats-card fade-in">
                 <h3>Estadísticas Globales</h3>
                 <div id="global-stats-content"></div>
             </div>
-
-            <!-- Proyección por municipio -->
             <div id="municipal-stats" class="stats-card fade-in" style="margin-top: 32px;">
                 <h3>Casillas proyectadas por municipio</h3>
                 <div id="municipal-table-container" class="table-responsive"></div>
             </div>
-
             <a id="download" class="btn success download-btn" style="display: block;" download="proyeccion_casillas.xlsx">
-                Descargar archivo Excel
+                📥 Descargar archivo Excel
             </a>
-       
         </div>
-
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+</DOCUMENT>
