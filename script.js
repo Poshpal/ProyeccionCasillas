@@ -535,7 +535,7 @@ function processFiles() {
 
                     let tableSinAsignarHTML = `
                         <div class="stats-card" style="margin-top: 20px;">
-                            <h3 style="color: #d9534f; margin-bottom: 5px;">⚠️ Unidades Sin Asignar</h3>
+                            <h3 style="color: #d9534f; margin-bottom: 5px;">⚠️ Localidades o manzanas sin Asignar</h3>
                             <p style="font-size: 0.9em; color: #555; margin-bottom: 15px;">
                                 Unidades que aparecen en el estadístico, su sección tiene al menos una casilla Extraordinaria, 
                                 pero la unidad no tiene asignación explícita.
@@ -553,7 +553,7 @@ function processFiles() {
                         }
                         tableSinAsignarHTML += `</tbody></table></div>`;
                     } else {
-                        tableSinAsignarHTML += `<div style="background-color:#d4edda;color:#155724;padding:12px;border-radius:4px;text-align:center;">✓ Todas las unidades están correctamente asignadas.</div>`;
+                        tableSinAsignarHTML += `<div style="background-color:#d4edda;color:#155724;padding:12px;border-radius:4px;text-align:center;">✓ Todas las localidades y/o manzanas están correctamente asignadas.</div>`;
                     }
                     tableSinAsignarHTML += `</div>`;
 
