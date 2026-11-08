@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyección de Casillas Electorales</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="page-nav">
+            <a href="index.html" class="back-link">← Volver al inicio</a>
+        </div>
+
+        <h1>Proyección de Casillas Electorales</h1>
+        
+                <!-- Subida de archivos -->
+        <div class="upload-section">
+            
+            <div class="file-group">
+                <label for="conformacion">Archivo de Conformación de Casillas (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="conformacion" accept=".xlsx">
+                    <span id="check-conformacion" class="file-check">✓</span>
+                </div>
+                <div id="name-conformacion" class="file-name-display"></div>
+            </div>
+              
+            <div class="guide">
+                <h3>📋 Archivo de Conformación (columnas requeridas)</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Entidad</div>
+                    <div class="col-box">B: Distrito</div>
+                    <div class="col-box">C: Distrito Local</div>
+                    <div class="col-box important">D: Municipio <span class="label">(índice 3)</span></div>
+                    <div class="col-box important">E: Sección <span class="label">(índice 4)</span></div>
+                    <div class="col-box important">F: Localidad <span class="label">(índice 5)</span></div>
+                    <div class="col-box">G: Nombre</div>
+                    <div class="col-box important">H: Manzana <span class="label">(índice 7)</span></div>
+                    <div class="col-box important">I: Asignación <span class="label">(índice 8)</span></div>
+                    <div class="col-box">J: Sede</div>
+                </div>
+            </div>
+        
+            <div class="file-group">
+                <label for="estadistico">Archivo Estadístico (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="estadistico" accept=".xlsx">
+                    <span id="check-estadistico" class="file-check">✓</span>
+                </div>
+                <div id="name-estadistico" class="file-name-display"></div>
+            </div>
+         
+            <div class="guide">
+                <h3>📋 Archivo Estadístico (columnas requeridas)</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Entidad</div>
+                    <div class="col-box">B: Distrito</div>
+                    <div class="col-box important">C: Municipio <span class="label">(índice 2)</span></div>
+                    <div class="col-box important">D: Sección <span class="label">(índice 3)</span></div>
+                    <div class="col-box important">E: Localidad <span class="label">(índice 4)</span></div>
+                    <div class="col-box important">F: Manzana <span class="label">(índice 5)</span></div>
+                    <div class="col-box important">G: Padrón <span class="label">(índice 6)</span></div>
+                    <div class="col-box important">H: Lista Nominal <span class="label">(índice 7)</span></div>
+                </div>
+            </div>
+
+            <div class="file-group" style="margin-top: 20px;">
+                <label for="catalogo">Catálogo de Localidades (.xlsx) — opcional:</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="catalogo" accept=".xlsx">
+                    <span id="check-catalogo" class="file-check">✓</span>
+                </div>
+                <div id="name-catalogo" class="file-name-display"></div>
+            </div>
+            <div class="guide">
+                <h3>📋 Catálogo de Localidades</h3>
+                <div class="col-table">
+                    <div class="col-box important">Municipio</div>
+                    <div class="col-box important">Sección</div>
+                    <div class="col-box important">Localidad (número)</div>
+                    <div class="col-box important">Nombre</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="base-selection">
+            <p>Base para determinar el número de casillas:</p>
+            <div class="radio-group">
+                <label><input type="radio" name="base" value="padron" checked> Padrón Electoral</label>
+                <label><input type="radio" name="base" value="lista"> Lista Nominal</label>
+            </div>
+        </div>
+
+        <div class="especiales-selection">
+            <p style="margin: 0 0 12px 0; font-weight: 600;">Proyección de Casillas Especiales:</p>
+            <label for="num-especiales">¿Cuántas casillas especiales proyecta instalar? (0 al 10):</label>
+            <input type="text" id="num-especiales" value="0" maxlength="2" style="width: 60px; padding: 8px; margin-left: 10px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-family: inherit; font-size: 1rem;">
+            
+            <div id="secciones-especiales-container" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                <p style="margin: 0 0 10px 0; font-size: 0.95em;">Ingrese la sección para cada casilla especial:</p>
+                <div id="secciones-inputs" style="display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+            </div>
+        </div>
+
+        <button type="button" class="btn primary" onclick="processFiles(); return false;">Generar Proyección</button>
+
+        <div id="loading" class="loading-overlay" style="display: none;">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <span>Procesando archivos...</span>
+            </div>
+        </div>
+
+        <div id="results" class="results-section" style="opacity: 0; transform: translateY(20px);">
+            <h2>Resultados de la Proyección</h2>
+            <div id="global-stats" class="stats-card">
+                <h3>Estadísticas Globales</h3>
+                <div id="global-stats-content"></div>
+            </div>
+            <div id="municipal-stats" class="stats-card">
+                <h3>Casillas proyectadas por municipio</h3>
+                <div id="municipal-table-container" class="table-responsive"></div>
+            </div>
+
+            <button type="button" id="btn-download-zip" class="btn success" style="display: none; width: 100%; max-width: 500px; margin: 20px auto;" onclick="descargarZIP(); return false;">
+                📥 Descargar ambos archivos (.zip)
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

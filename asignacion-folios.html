@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Folios</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="page-nav">
+            <a href="index.html" class="back-link">← Volver al inicio</a>
+        </div>
+
+        <h1>Asignación de Folios</h1>
+        <p class="tool-description">
+            Asigna rangos de folios a cada casilla usando el Listado Nominal. 
+            Las casillas especiales (tipo <strong>S</strong>) reciben <strong>1000 + boletas extras</strong>.
+        </p>
+
+        <div class="upload-section">
+            <div class="file-group">
+                <label for="archivo-proyeccion">Archivo de Proyección de Casillas (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="archivo-proyeccion" accept=".xlsx">
+                    <span id="check-archivo" class="file-check">✓</span>
+                </div>
+            </div>
+
+            <div class="guide">
+                <h3>📋 Columnas esperadas en el archivo</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Distrito</div>
+                    <div class="col-box important">B: Municipio</div>
+                    <div class="col-box important">C: Sección</div>
+                    <div class="col-box important">D: Tipo de Casilla</div>
+                    <div class="col-box">E: Padrón Electoral</div>
+                    <div class="col-box important">F: Listado nominal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="params-section">
+            <h3>Boletas adicionales por casilla (representantes)</h3>
+            <p class="params-help">Estas boletas se suman al Listado Nominal de cada casilla ordinaria, y también a las 1000 de las casillas especiales.</p>
+
+            <div class="params-grid">
+                <div class="param-group">
+                    <label for="partidos-federales">Nº de partidos <strong>federales</strong></label>
+                    <input type="number" id="partidos-federales" min="0" value="0" class="param-input">
+                </div>
+                <div class="param-group">
+                    <label for="boletas-federales">Boletas por partido federal</label>
+                    <input type="number" id="boletas-federales" min="0" value="0" class="param-input">
+                </div>
+                <div class="param-group">
+                    <label for="partidos-locales">Nº de partidos <strong>locales</strong></label>
+                    <input type="number" id="partidos-locales" min="0" value="0" class="param-input">
+                </div>
+                <div class="param-group">
+                    <label for="boletas-locales">Boletas por partido local</label>
+                    <input type="number" id="boletas-locales" min="0" value="0" class="param-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="params-section">
+            <h3>Candidaturas independientes</h3>
+            <div class="radio-group" style="margin-bottom: 16px;">
+                <label>
+                    <input type="radio" name="tiene-independientes" value="no" checked onchange="toggleIndependientes()">
+                    No hay
+                </label>
+                <label>
+                    <input type="radio" name="tiene-independientes" value="si" onchange="toggleIndependientes()">
+                    Sí hay
+                </label>
+            </div>
+
+            <div id="independientes-campos" class="params-grid" style="display: none;">
+                <div class="param-group">
+                    <label for="num-independientes">Nº de candidaturas</label>
+                    <input type="number" id="num-independientes" min="0" value="0" class="param-input">
+                </div>
+                <div class="param-group">
+                    <label for="boletas-independientes">Boletas por candidatura</label>
+                    <input type="number" id="boletas-independientes" min="0" value="0" class="param-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="params-section">
+            <h3>Boletas adicionales por resolución del TEPJF</h3>
+            <div class="radio-group" style="margin-bottom: 16px;">
+                <label>
+                    <input type="radio" name="tiene-tepjf" value="no" checked onchange="toggleTepjf()">
+                    No hay
+                </label>
+                <label>
+                    <input type="radio" name="tiene-tepjf" value="si" onchange="toggleTepjf()">
+                    Sí hay
+                </label>
+            </div>
+
+            <div id="tepjf-campos" style="display: none;">
+                <div class="param-group" style="max-width: 280px; margin-bottom: 12px;">
+                    <label for="num-casos-tepjf">¿Cuántos casos aplican?</label>
+                    <input type="number" id="num-casos-tepjf" min="1" max="100" value="1" class="param-input" onchange="generarCamposCasosTepjf()">
+                </div>
+                <div id="casos-tepjf-lista"></div>
+            </div>
+        </div>
+
+        <div class="extras-preview" id="extras-preview">
+            Boletas extras por casilla ordinaria: <strong>0</strong>
+        </div>
+
+        <button class="btn primary" onclick="procesarFolios()">Generar Asignación de Folios</button>
+
+        <div id="loading" class="loading-overlay" style="display: none;">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <span>Asignando folios...</span>
+            </div>
+        </div>
+
+        <div id="results" class="results-section" style="display: none;">
+            <h2>Resultados de la Asignación</h2>
+            <div id="global-stats" class="stats-card">
+                <h3>Resumen</h3>
+                <div id="global-stats-content"></div>
+            </div>
+            <div class="stats-card">
+                <h3>Vista previa</h3>
+                <div id="preview-table-container" class="table-responsive"></div>
+            </div>
+            <a id="download" class="btn success" style="display: none; width: 100%; max-width: 500px; margin: 20px auto;" download="asignacion_folios.xlsx">
+                📥 Descargar archivo Excel con folios
+            </a>
+        </div>
+    </div>
+    <script src="script-folios.js"></script>
+</body>
+</html>

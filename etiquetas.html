@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Etiquetas de Casillas</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="page-nav no-print">
+            <a href="index.html" class="back-link">← Volver al inicio</a>
+        </div>
+
+        <h1 class="no-print">Generador de Etiquetas de Casillas</h1>
+        <p class="tool-description no-print">
+            Sube el archivo de proyección de casillas y genera etiquetas listas para imprimir.
+        </p>
+
+        <div class="upload-section no-print">
+            <div class="file-group">
+                <label for="archivo-proyeccion">Archivo de Proyección de Casillas (.xlsx):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="archivo-proyeccion" accept=".xlsx">
+                    <span id="check-archivo" class="file-check">✓</span>
+                </div>
+            </div>
+            <div class="guide">
+                <h3>📋 Columnas esperadas</h3>
+                <div class="col-table">
+                    <div class="col-box">A: Distrito</div>
+                    <div class="col-box important">B: Municipio</div>
+                    <div class="col-box important">C: Sección</div>
+                    <div class="col-box important">D: Tipo de Casilla</div>
+                    <div class="col-box">E: Padrón</div>
+                    <div class="col-box">F: Listado nominal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="params-section no-print">
+            <h3>Datos para las etiquetas</h3>
+            <div class="params-grid">
+                <div class="param-group">
+                    <label for="entidad">Entidad federativa</label>
+                    <input type="text" id="entidad" class="param-input" value="CHIAPAS" placeholder="CHIAPAS">
+                </div>
+                <div class="param-group">
+                    <label for="num-etiquetas">¿Cuántas etiquetas por cada casilla?</label>
+                    <input type="number" id="num-etiquetas" class="param-input" min="1" max="20" value="1">
+                </div>
+                <div class="param-group" style="grid-column: 1 / -1;">
+                    <label for="plantilla-etiqueta">Tipo de hoja de etiquetas autoadheribles</label>
+                    <select id="plantilla-etiqueta" class="param-input" onchange="actualizarInfoPlantilla()">
+                        <option value="5163">Avery 5163 / envío — 10 por hoja (2×5) ≈ 10×5 cm — Recomendada</option>
+                        <option value="5395">Avery 5395 / gafete — 8 por hoja (2×4) ≈ 9×6 cm</option>
+                        <option value="5164">Avery 5164 / grande — 6 por hoja (2×3) ≈ 10×8.5 cm</option>
+                        <option value="5162">Avery 5162 / mediana — 14 por hoja (2×7) ≈ 10×3.4 cm (compacta)</option>
+                        <option value="custom10">Genérica 10 por hoja (2×5)</option>
+                        <option value="custom8">Genérica 8 por hoja (2×4)</option>
+                        <option value="custom6">Genérica 6 por hoja (2×3)</option>
+                    </select>
+                    <p id="info-plantilla" class="params-help" style="margin:8px 0 0 0;"></p>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn primary no-print" onclick="generarEtiquetas()">Generar Etiquetas</button>
+
+        <div id="loading" class="loading-overlay" style="display:none;">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <span>Generando etiquetas...</span>
+            </div>
+        </div>
+
+        <div id="etiquetas-container">
+            <div class="etiquetas-actions no-print">
+                <button class="btn" style="background:#ef4444;" onclick="descargarTodosPDFPorMunicipio()">⬇️ Descargar HTML por municipio</button>
+                <button class="btn" style="background:#3b82f6;" onclick="descargarHTML()">⬇️ Descargar HTML completo</button>
+                <button class="btn" style="background:#64748b;" onclick="document.getElementById('etiquetas-container').classList.remove('visible')">Cerrar vista</button>
+            </div>
+            <div id="resumen-etiquetas" class="stats-card no-print" style="margin-bottom:20px;opacity:1;transform:none;"></div>
+            <div id="lista-municipios" class="no-print" style="margin-bottom:24px;"></div>
+            <div id="hojas-etiquetas"></div>
+        </div>
+    </div>
+
+    <script src="script-etiquetas.js"></script>
+</body>
+</html>

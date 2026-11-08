@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Herramientas Electorales</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos específicos para la cabecera */
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .header-logo svg {
+            width: 130px;
+            height: 130px;
+            /* Sombra suave para darle volumen */
+            filter: drop-shadow(0 12px 20px rgba(71, 85, 105, 0.25));
+        }
+
+        /* Animación sutil de flotación */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Forzar colores específicos en la cabecera */
+        .portal-header h1 {
+            color: #1e293b; /* Negro/Gris oscuro */
+            -webkit-text-fill-color: #1e293b; 
+            background: none; 
+        }
+
+        .portal-header p {
+            color: #64748b; /* Gris medio */
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-wrapper">
+        <header class="portal-header">
+            
+           <h1>Herramientas de Organización Electoral</h1>
+            <p>Plataforma integral para la proyección, asignación y generación de documentos electorales.</p>
+        </header>
+
+        <div class="menu-grid">
+            <!-- Tarjeta 1 -->
+            <a href="proyeccion.html" class="menu-card">
+                <div class="card-icon">📊</div>
+                <h2>Proyección de Casillas</h2>
+                <p>Genera la proyección detallada de casillas (Básicas, Contiguas y Extraordinarias) basada en el padrón electoral y la lista nominal.</p>
+                <div class="card-action">Acceder a la herramienta</div>
+            </a>
+
+            <!-- Tarjeta 2 -->
+            <a href="asignacion-folios.html" class="menu-card">
+                <div class="card-icon">🔢</div>
+                <h2>Asignación de Folios</h2>
+                <p>Calcula y distribuye los rangos de folios para las boletas electorales, incluyendo representantes de partidos y resoluciones del TEPJF.</p>
+                <div class="card-action">Acceder a la herramienta</div>
+            </a>
+
+            <!-- Tarjeta 3 -->
+            <a href="etiquetas.html" class="menu-card">
+                <div class="card-icon">🏷️</div>
+                <h2>Generador de Etiquetas</h2>
+                <p>Crea e imprime etiquetas autoadheribles para las casillas electorales. Exporta en formato PDF listo para imprimir en hojas Avery.</p>
+                <div class="card-action">Acceder a la herramienta</div>
+            </a>
+
+            <!-- Tarjeta 4 -->
+            <a href="https://rutas-casillas.vercel.app/login" class="menu-card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🗺️</div>
+                <h2>Sistema de Rutas</h2>
+                <p>Plataforma para la asignación de rutas, recorridos seccionales y ubicación de los domicilios donde se instalarán las casillas electorales.</p>
+                <div class="card-action">Acceder al sistema</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
