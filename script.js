@@ -535,10 +535,10 @@ function processFiles() {
 
                     let tableSinAsignarHTML = `
                         <div class="stats-card" style="margin-top: 20px;">
-                            <h3 style="color: #d9534f; margin-bottom: 5px;">⚠️ Localidades o manzanas sin Asignar</h3>
+                            <h3 style="color: #d9534f; margin-bottom: 5px;">⚠️ Localidades o manzanas sin asignar</h3>
                             <p style="font-size: 0.9em; color: #555; margin-bottom: 15px;">
-                                Unidades que aparecen en el estadístico, su sección tiene al menos una casilla Extraordinaria, 
-                                pero la unidad no tiene asignación explícita.
+                                Localidades o manzanas que aparecen en el estadístico, pero en el archivo de conformación
+                                no tienen asignación explícita.
                             </p>
                     `;
 
